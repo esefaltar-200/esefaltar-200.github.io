@@ -99,13 +99,30 @@ ul.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .btn { font-family: var(--body); font-size: 16px; font-weight: 700; border-radius: 10px; padding: 12px 18px; border: 2px solid var(--amber); background: transparent; color: var(--amber); cursor: pointer; text-decoration: none; display: inline-block; }
 .btn.fill { background: var(--amber); color: var(--navy); }
 .btn[hidden], [hidden] { display: none !important; }
-.zapnote { color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+.note { color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+.onlyprint { display: none; }
 #copymsg { color: var(--teal); font-size: 15px; align-self: center; }
 .alert { margin-top: 28px; border: 2px dashed var(--teal); border-radius: 14px; padding: 16px 18px; }
 .alert h2 { color: var(--teal); font-size: 24px; }
 .alert p { margin: 6px 0 0; }
 footer { margin-top: 32px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding-top: 16px; }
 footer p { margin: 0 0 8px; }
+@media print {
+  html, body { background: #fff !important; color: #000 !important; }
+  #bg, form#f, .actions, .note, .bar, .alert, #progress, noscript { display: none !important; }
+  * { animation: none !important; transition: none !important; box-shadow: none !important; }
+  .brand, h1, h1 em { color: #000 !important; }
+  .lead, .why, .qty, .nolink, #risk .fine, footer, .onlyprint { color: #333 !important; }
+  #risk, .item { background: #fff !important; border-color: #999 !important; color: #000 !important; break-inside: avoid; }
+  #risk { border-left-color: #000 !important; }
+  .pill { background: #eee !important; color: #000 !important; border: 1px solid #999; }
+  .group h3 { color: #000 !important; }
+  .item.done { opacity: 1; }
+  .chk { accent-color: #000; }
+  .buy { background: none !important; color: #000 !important; padding: 0; font-size: 0; font-weight: 400; word-break: break-all; text-decoration: none; }
+  .buy::after { content: attr(href); font-size: 12px; }
+  .onlyprint { display: block !important; margin: 8px 0 0; font-size: 15px; }
+}
 @media (max-width: 460px) {
   .checks { grid-template-columns: 1fr; }
   body { font-size: 16px; }
@@ -215,6 +232,7 @@ footer p { margin: 0 0 8px; }
 </form>
 
 <section id="risk" aria-live="polite"></section>
+<p id="printsum" class="onlyprint"></p>
 
 <div class="summary">
   <h2 id="s5"><span class="num">5</span>Sua lista</h2>
@@ -224,12 +242,14 @@ footer p { margin: 0 0 8px; }
 <div id="lista"></div>
 
 <div class="actions">
-  <button type="button" class="btn fill" id="copy">Copiar a lista</button>
-  <a class="btn" id="wa" href="https://wa.me/" target="_blank" rel="noopener">Mandar por WhatsApp</a>
-  <a class="btn fill" id="zap" href="#" target="_blank" rel="noopener" hidden>Receber minha lista no WhatsApp</a>
+  <a class="btn fill" id="wa" href="https://wa.me/" target="_blank" rel="noopener">Mandar por WhatsApp</a>
+  <button type="button" class="btn" id="share" hidden>Compartilhar</button>
+  <button type="button" class="btn" id="print">Imprimir ou salvar em PDF</button>
+  <button type="button" class="btn" id="copy">Copiar a lista</button>
+  <button type="button" class="btn" id="copylink">Copiar o link da minha lista</button>
   <span id="copymsg" role="status"></span>
 </div>
-<p class="zapnote" id="zapnote" hidden>O botão verde abre uma conversa com o canal. Você só entra na conversa se enviar a mensagem.</p>
+<p class="note">O link da minha lista guarda só as suas escolhas (região, pessoas, casa ou apartamento e perfil). Quem abrir o link vê a mesma lista. Nada é enviado para o canal.</p>
 
 <section class="alert">
   <h2>Antes de comprar: cadastre o alerta da Defesa Civil</h2>
@@ -247,9 +267,6 @@ footer p { margin: 0 0 8px; }
 <script>
 /* ====== LINKS DE AFILIADO (edite aqui) ======
    Para ligar um item novo, cole o link curto da Shopee no id do item. */
-/* WhatsApp do canal (opcional). Só números, com 55 + DDD. Ex.: '5511999998888'. Vazio = o botão fica escondido. */
-var WHATSAPP_CANAL = '';
-
 var SHOPEE = 'https://s.shopee.com.br/';
 var LINKS = {
   mochila: SHOPEE + '40hzl3vEJT',
@@ -321,7 +338,27 @@ var S = { regiao: '', pessoas: 3, moradia: 'casa', crianca: false, idoso: false,
 function load() {
   try { var r = localStorage.getItem(LS); if (r) { var o = JSON.parse(r); for (var k in o) if (k in S) S[k] = o[k]; } } catch (e) {}
 }
-function save() { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} }
+function linkLista() {
+  if (!/^https?:$/.test(location.protocol)) return '';
+  var x = (S.crianca ? 'c' : '') + (S.idoso ? 'i' : '') + (S.pet ? 'a' : '') + (S.remedio ? 'r' : '');
+  return location.origin + location.pathname + '?r=' + (S.regiao || 'x') + '&p=' + S.pessoas + '&m=' + (S.moradia === 'apto' ? 'a' : 'c') + (x ? '&x=' + x : '');
+}
+function lerLink() {
+  try {
+    var q = new URLSearchParams(location.search);
+    if (!q.has('p') && !q.has('r')) return;
+    var r = q.get('r'); S.regiao = Object.prototype.hasOwnProperty.call(REGIOES, r) ? r : '';
+    var p = parseInt(q.get('p'), 10); if (p >= 1 && p <= 15) S.pessoas = p;
+    S.moradia = q.get('m') === 'a' ? 'apto' : 'casa';
+    var x = q.get('x') || '';
+    S.crianca = x.indexOf('c') > -1; S.idoso = x.indexOf('i') > -1; S.pet = x.indexOf('a') > -1; S.remedio = x.indexOf('r') > -1;
+    S.feito = {};
+  } catch (e) {}
+}
+function save() {
+  try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {}
+  try { var l = linkLista(); if (l) history.replaceState(null, '', l); } catch (e) {}
+}
 
 function up(n) { return Math.max(1, Math.ceil(n)); }
 
@@ -473,13 +510,9 @@ function render(o) {
   document.getElementById('barfill').style.width = (total ? Math.round(ok / total * 100) : 0) + '%';
   document.querySelector('.bar').classList.toggle('full', full);
   document.getElementById('wa').href = 'https://wa.me/?text=' + encodeURIComponent(texto());
-  var zap = document.getElementById('zap'), nota = document.getElementById('zapnote');
-  if (WHATSAPP_CANAL) {
-    var resumo = S.pessoas + (S.pessoas === 1 ? ' pessoa' : ' pessoas') + ', ' + (S.moradia === 'apto' ? 'apartamento' : 'casa') + (r && REGIOES[r] ? ', ' + REGIOES[r].nome : '') +
-      (S.crianca ? ', criança' : '') + (S.idoso ? ', idoso' : '') + (S.pet ? ', pet' : '') + (S.remedio ? ', remédio contínuo' : '');
-    zap.href = 'https://wa.me/' + WHATSAPP_CANAL + '?text=' + encodeURIComponent('Oi! Quero receber a minha lista do kit de preparo. Minha casa: ' + resumo + '.');
-    zap.hidden = false; nota.hidden = false;
-  }
+  var resumo = S.pessoas + (S.pessoas === 1 ? ' pessoa' : ' pessoas') + ', ' + (S.moradia === 'apto' ? 'apartamento' : 'casa') + (r && REGIOES[r] ? ', ' + REGIOES[r].nome : '') +
+    (S.crianca ? ', criança' : '') + (S.idoso ? ', pessoa idosa' : '') + (S.pet ? ', animal de estimação' : '') + (S.remedio ? ', remédio contínuo' : '');
+  document.getElementById('printsum').textContent = 'Lista para: ' + resumo + '.';
   var out = document.getElementById('pessoas');
   out.textContent = S.pessoas;
   if (o.bump) { out.classList.remove('bump'); void out.offsetWidth; out.classList.add('bump'); }
@@ -492,6 +525,7 @@ function texto() {
     t += '\n' + gr.titulo.toUpperCase() + '\n';
     gr.itens.forEach(function (it) { t += '- ' + it.nome + ' (' + it.qtd + ')' + (it.link ? ' ' + it.link : '') + '\n'; });
   });
+  var lk = linkLista(); if (lk) t += '\nMinha lista: ' + lk + '\n';
   t += '\nAlerta da Defesa Civil: mande o CEP por SMS para 40199.\nFeito com a calculadora do E Se Faltar? Alguns links são de afiliado.';
   return t;
 }
@@ -518,20 +552,31 @@ document.getElementById('lista').addEventListener('change', function (e) {
   save(); render({ just: id });
   var again = document.getElementById('c-' + id); if (again) again.focus();
 });
-document.getElementById('copy').addEventListener('click', function () {
-  var msg = document.getElementById('copymsg'), t = texto();
-  function ok() { msg.textContent = 'Lista copiada.'; setTimeout(function () { msg.textContent = ''; }, 2500); }
+function copiar(t, okmsg) {
+  var msg = document.getElementById('copymsg');
+  function ok() { msg.textContent = okmsg; setTimeout(function () { msg.textContent = ''; }, 2500); }
   function fail() {
     var ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
     document.body.appendChild(ta); ta.select();
     var good = false; try { good = document.execCommand('copy'); } catch (e) {}
     document.body.removeChild(ta);
-    msg.textContent = good ? 'Lista copiada.' : 'Não deu para copiar. Use o botão do WhatsApp.';
+    if (good) ok(); else { msg.textContent = 'Não deu para copiar. Use o botão do WhatsApp.'; }
   }
   try { navigator.clipboard.writeText(t).then(ok, fail); } catch (e) { fail(); }
+}
+document.getElementById('copy').addEventListener('click', function () { copiar(texto(), 'Lista copiada.'); });
+document.getElementById('copylink').addEventListener('click', function () {
+  var l = linkLista();
+  if (!l) { var m = document.getElementById('copymsg'); m.textContent = 'O link só funciona com o site publicado.'; setTimeout(function () { m.textContent = ''; }, 3000); return; }
+  copiar(l, 'Link copiado.');
 });
+document.getElementById('print').addEventListener('click', function () { window.print(); });
+if (navigator.share) {
+  var sb = document.getElementById('share'); sb.hidden = false;
+  sb.addEventListener('click', function () { navigator.share({ title: 'Kit de preparo da minha casa', text: texto() }).catch(function () {}); });
+}
 
-load(); sync(); render({ anim: true });
+load(); lerLink(); sync(); render({ anim: true });
 
 /* Fundo animado: plasma suave nas cores do canal. Renderiza pequeno e o navegador amplia (vira brilho macio).
    Segue o ponteiro, acelera quando você marca um item, pausa com a aba escondida e fica parado se o sistema pede menos movimento. */
