@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit de Preparo da Sua Casa | E Se Faltar?</title>
+<meta name="description" content="Responda cinco perguntas e receba a lista do que ter em casa para apagão, enchente ou seca, com a quantidade certa para a sua família.">
+<meta name="theme-color" content="#0F1B2D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1B2D'/%3E%3Cpath d='M16 34l12 12 22-26' fill='none' stroke='%23F2A33A' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="E Se Faltar?">
+<meta property="og:title" content="Monte o kit de preparo da sua casa">
+<meta property="og:description" content="Apagão, enchente ou seca: a lista certa para a sua família, com a quantidade de cada item.">
+<!-- Se trocar o endereço do site, atualize o og:image abaixo para o novo endereço. -->
+<meta property="og:image" content="https://esefaltar-200.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: coluna única de leitura, formulário em cima, resultado logo abaixo, tudo visível. Tema único: marinho do canal. */
+:root {
+  --navy: #0F1B2D;
+  --panel: #172A45;
+  --line: #2A4163;
+  --cream: #F4EAD5;
+  --amber: #F2A33A;
+  --teal: #2FB8B0;
+  --muted: #AEB9C9;
+  --display: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+  --body: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--navy); color: var(--cream); font-family: var(--body); font-size: 17px; line-height: 1.5; }
+body { padding: 0 16px 64px; background: transparent; position: relative; }
+#bg { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; display: block; }
+.wrap { max-width: 720px; margin: 0 auto; }
+header { padding: 28px 0 8px; }
+.brand { font-family: var(--display); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); font-size: 15px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(38px, 9vw, 58px); line-height: 1; margin: 8px 0 10px; text-transform: uppercase; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--amber); }
+.lead { color: var(--muted); margin: 0; max-width: 60ch; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 26px; text-transform: uppercase; letter-spacing: .02em; margin: 0 0 4px; text-wrap: balance; }
+.step { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-top: 16px; }
+.step > p.hint { margin: 0 0 14px; color: var(--muted); font-size: 15px; }
+.num { display: inline-block; font-family: var(--display); color: var(--navy); background: var(--amber); border-radius: 6px; padding: 0 8px; margin-right: 8px; font-size: 22px; }
+
+/* Região */
+.regions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.regions input, .unsure input, .seg input { position: absolute; opacity: 0; pointer-events: none; }
+.unsure { display: block; position: relative; }
+.region { display: block; height: 100%; border: 2px solid var(--line); border-radius: 12px; padding: 12px; cursor: pointer; background: var(--navy); }
+.region b { display: block; font-family: var(--display); font-size: 22px; text-transform: uppercase; line-height: 1.1; }
+.region span { display: block; color: var(--muted); font-size: 14px; margin-top: 2px; }
+input:checked + .region, input:checked + .opt { border-color: var(--amber); background: #22344F; box-shadow: inset 0 0 0 1px var(--amber); }
+input:focus-visible + .region, input:focus-visible + .opt, button:focus-visible, a:focus-visible, .chk:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+.unsure { margin-top: 10px; }
+.unsure .region { padding: 10px 12px; }
+
+/* Controles */
+.row { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; }
+.stepper { display: inline-flex; align-items: center; border: 2px solid var(--line); border-radius: 12px; background: var(--navy); }
+.stepper button { width: 48px; height: 48px; border: 0; background: transparent; color: var(--amber); font-size: 28px; cursor: pointer; font-family: var(--body); }
+.stepper output { min-width: 48px; text-align: center; font-family: var(--display); font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.seg { display: inline-flex; gap: 8px; }
+.opt { display: block; border: 2px solid var(--line); border-radius: 12px; padding: 11px 18px; cursor: pointer; background: var(--navy); font-weight: 600; }
+.checks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.checks label { display: flex; gap: 10px; align-items: center; border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--navy); cursor: pointer; font-size: 16px; }
+.checks input { width: 22px; height: 22px; accent-color: var(--amber); flex: none; }
+.label { font-weight: 600; margin: 0 0 8px; }
+
+/* Resultado */
+#risk { margin-top: 28px; border-radius: 14px; border: 1px solid var(--line); border-left: 8px solid var(--teal); background: var(--panel); padding: 18px; }
+#risk.on { border-left-color: var(--amber); }
+.pill { display: inline-block; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--navy); background: var(--teal); padding: 2px 10px; border-radius: 99px; }
+#risk.on .pill { background: var(--amber); }
+#risk h2 { margin-top: 8px; font-size: 32px; }
+#risk p { margin: 6px 0 0; }
+#risk .fine { color: var(--muted); font-size: 14px; }
+.summary { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; margin: 28px 0 4px; }
+.progress { color: var(--muted); font-size: 15px; font-variant-numeric: tabular-nums; }
+.group { margin-top: 20px; }
+.group h3 { font-family: var(--display); text-transform: uppercase; letter-spacing: .06em; font-size: 20px; color: var(--teal); margin: 0 0 8px; }
+ul.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.item { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.item.done { opacity: .6; }
+.item.done .name { text-decoration: line-through; }
+.chk { width: 26px; height: 26px; accent-color: var(--amber); margin: 2px 0 0; }
+.name { font-weight: 600; }
+.qty { display: inline-block; font-family: var(--display); font-weight: 700; font-size: 18px; color: var(--amber); margin-left: 6px; }
+.why { color: var(--muted); font-size: 15px; margin: 2px 0 0; }
+.buy { grid-column: 2; justify-self: start; margin-top: 6px; display: inline-block; background: var(--amber); color: var(--navy); font-weight: 700; text-decoration: none; padding: 9px 16px; border-radius: 10px; }
+.nolink { grid-column: 2; color: var(--muted); font-size: 13px; margin-top: 4px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.btn { font-family: var(--body); font-size: 16px; font-weight: 700; border-radius: 10px; padding: 12px 18px; border: 2px solid var(--amber); background: transparent; color: var(--amber); cursor: pointer; text-decoration: none; display: inline-block; }
+.btn.fill { background: var(--amber); color: var(--navy); }
+.btn[hidden], [hidden] { display: none !important; }
+.zapnote { color: var(--muted); font-size: 14px; margin: 10px 0 0; }
+#copymsg { color: var(--teal); font-size: 15px; align-self: center; }
+.alert { margin-top: 28px; border: 2px dashed var(--teal); border-radius: 14px; padding: 16px 18px; }
+.alert h2 { color: var(--teal); font-size: 24px; }
+.alert p { margin: 6px 0 0; }
+footer { margin-top: 32px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding-top: 16px; }
+footer p { margin: 0 0 8px; }
+@media (max-width: 460px) {
+  .checks { grid-template-columns: 1fr; }
+  body { font-size: 16px; }
+}
+/* Barra de progresso */
+.bar { height: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: 99px; overflow: hidden; margin: 6px 0 4px; }
+.bar i { display: block; height: 100%; width: 0; background: var(--amber); border-radius: 99px; }
+.bar.full i { background: var(--teal); }
+
+/* Animações básicas. Só rodam para quem não pediu menos movimento. */
+@media (prefers-reduced-motion: no-preference) {
+  .item, .region, .opt, .checks label { transition: border-color .15s, background .15s, opacity .2s, transform .15s; }
+  .bar i { transition: width .5s cubic-bezier(.2,.8,.2,1), background .3s; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.04); } 100% { transform: scale(1); } }
+  @keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.35); color: var(--amber); } 100% { transform: scale(1); } }
+  @keyframes slidein { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+  @keyframes glow { 0% { box-shadow: 0 0 0 0 rgba(47,184,176,.7); } 100% { box-shadow: 0 0 0 14px rgba(47,184,176,0); } }
+
+  /* Entrada da página */
+  .brand, h1, .lead { animation: rise .6s cubic-bezier(.2,.8,.2,1) both; }
+  h1 { animation-delay: .08s; }
+  .lead { animation-delay: .16s; }
+  .step { animation: rise .55s cubic-bezier(.2,.8,.2,1) both; }
+  .step:nth-of-type(1) { animation-delay: .22s; }
+  .step:nth-of-type(2) { animation-delay: .30s; }
+  .step:nth-of-type(3) { animation-delay: .38s; }
+  .step:nth-of-type(4) { animation-delay: .46s; }
+
+  /* Escolhas */
+  .region:hover, .opt:hover, .checks label:hover { transform: translateY(-2px); border-color: var(--teal); }
+  input:checked + .region, input:checked + .opt { animation: pop .3s ease-out; }
+  .checks label:has(input:checked) { border-color: var(--amber); background: #22344F; animation: pop .3s ease-out; }
+  .stepper button { transition: transform .12s, background .15s; border-radius: 10px; }
+  .stepper button:hover { background: #22344F; }
+  .stepper button:active { transform: scale(.85); }
+  #pessoas.bump { animation: bump .35s ease-out; }
+
+  /* Resultado */
+  #risk.fx { animation: slidein .45s cubic-bezier(.2,.8,.2,1); }
+  #lista.enter .item { animation: rise .45s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--i, 0) * 28ms); }
+  .item.just { animation: pop .3s ease-out; }
+  .item.just .chk { animation: glow .5s ease-out; border-radius: 6px; }
+  .item:hover { border-color: var(--teal); }
+
+  /* Botões */
+  .buy, .btn { transition: transform .12s, filter .15s, background .15s; }
+  .buy:hover, .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .buy:active, .btn:active { transform: scale(.96); }
+  #copymsg:not(:empty) { animation: slidein .3s ease-out; }
+}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="wrap">
+<header>
+  <div class="brand">E Se Faltar? · O plano para quando faltar</div>
+  <h1>Monte o kit de preparo <em>da sua casa</em></h1>
+  <p class="lead">Responda cinco perguntas. Você recebe a lista do que ter em casa, com a quantidade certa para a sua família e o risco que mais pesa na sua região.</p>
+</header>
+<noscript><section class="step"><h2>Ative o JavaScript</h2><p class="hint" style="margin:0">Este site monta a sua lista no próprio aparelho e precisa do JavaScript ligado para funcionar.</p></section></noscript>
+
+<form id="f" autocomplete="off" onsubmit="return false">
+  <section class="step" aria-labelledby="s1">
+    <h2 id="s1"><span class="num">1</span>Onde você mora?</h2>
+    <p class="hint">A região muda o risco principal e os itens extras da lista.</p>
+    <div class="regions" role="radiogroup" aria-labelledby="s1">
+      <label><input type="radio" name="regiao" value="sul"><span class="region"><b>Sul</b><span>PR, SC e RS</span></span></label>
+      <label><input type="radio" name="regiao" value="sudeste"><span class="region"><b>Sudeste</b><span>SP, RJ, MG e ES</span></span></label>
+      <label><input type="radio" name="regiao" value="nne"><span class="region"><b>Norte e Nordeste</b><span>AM, PA, BA, CE, PE e demais</span></span></label>
+      <label><input type="radio" name="regiao" value="co"><span class="region"><b>Centro-Oeste</b><span>GO, MT, MS e DF</span></span></label>
+    </div>
+    <label class="unsure"><input type="radio" name="regiao" value="" checked><span class="region"><b>Prefiro não dizer</b><span>Mostra a lista básica para apagão</span></span></label>
+  </section>
+
+  <section class="step" aria-labelledby="s2">
+    <h2 id="s2"><span class="num">2</span>Quantas pessoas moram aí?</h2>
+    <p class="hint">Conte todo mundo que dorme na casa, crianças incluídas.</p>
+    <div class="stepper" role="group" aria-label="Número de pessoas">
+      <button type="button" id="minus" aria-label="Menos uma pessoa">−</button>
+      <output id="pessoas" aria-live="polite">3</output>
+      <button type="button" id="plus" aria-label="Mais uma pessoa">+</button>
+    </div>
+  </section>
+
+  <section class="step" aria-labelledby="s3">
+    <h2 id="s3"><span class="num">3</span>Casa ou apartamento?</h2>
+    <p class="hint">O que falta muda um pouco entre um e outro.</p>
+    <div class="seg" role="radiogroup" aria-labelledby="s3">
+      <label><input type="radio" name="moradia" value="casa" checked><span class="opt">Casa</span></label>
+      <label><input type="radio" name="moradia" value="apto"><span class="opt">Apartamento</span></label>
+    </div>
+  </section>
+
+  <section class="step" aria-labelledby="s4">
+    <h2 id="s4"><span class="num">4</span>Tem alguém assim na casa?</h2>
+    <p class="hint">Marque o que se aplica. Cada marca acrescenta itens à lista.</p>
+    <div class="checks">
+      <label><input type="checkbox" id="crianca"> Bebê ou criança pequena</label>
+      <label><input type="checkbox" id="idoso"> Pessoa idosa</label>
+      <label><input type="checkbox" id="pet"> Animal de estimação</label>
+      <label><input type="checkbox" id="remedio"> Remédio contínuo ou aparelho elétrico</label>
+    </div>
+  </section>
+</form>
+
+<section id="risk" aria-live="polite"></section>
+
+<div class="summary">
+  <h2 id="s5"><span class="num">5</span>Sua lista</h2>
+  <div class="progress" id="progress"></div>
+</div>
+<div class="bar" aria-hidden="true"><i id="barfill"></i></div>
+<div id="lista"></div>
+
+<div class="actions">
+  <button type="button" class="btn fill" id="copy">Copiar a lista</button>
+  <a class="btn" id="wa" href="https://wa.me/" target="_blank" rel="noopener">Mandar por WhatsApp</a>
+  <a class="btn fill" id="zap" href="#" target="_blank" rel="noopener" hidden>Receber minha lista no WhatsApp</a>
+  <span id="copymsg" role="status"></span>
+</div>
+<p class="zapnote" id="zapnote" hidden>O botão verde abre uma conversa com o canal. Você só entra na conversa se enviar a mensagem.</p>
+
+<section class="alert">
+  <h2>Antes de comprar: cadastre o alerta da Defesa Civil</h2>
+  <p>É de graça. Mande por SMS o <b>CEP</b> da sua casa para o número <b>40199</b> e você passa a receber os avisos de risco da sua área. Dá para cadastrar mais de um CEP, como o do trabalho ou o de parentes. Para sair, responda <b>SAIR</b>.</p>
+  <p class="fine" style="color:var(--muted);font-size:14px">Número de telefones de emergência para anotar num papel: 199 (Defesa Civil) e 193 (Bombeiros).</p>
+</section>
+
+<footer>
+  <p>Alguns links levam à Shopee e o canal pode receber uma pequena comissão, sem custo extra para você. Os itens sem botão você compra onde preferir.</p>
+  <p>Conteúdo informativo, não substitui a orientação da Defesa Civil. Previsão climática é tendência e muda de cidade para cidade. Fontes: Defesa Civil Nacional (kit de emergência de 72 horas e Defesa Civil Alerta), Painel El Niño do Inmet e Nota Técnica do Cemaden.</p>
+  <p>Suas respostas ficam só neste aparelho. O site não pede cadastro nem guarda seus dados.</p>
+</footer>
+</div>
+
+<script>
+/* ====== LINKS DE AFILIADO (edite aqui) ======
+   Para ligar um item novo, cole o link curto da Shopee no id do item. */
+/* WhatsApp do canal (opcional). Só números, com 55 + DDD. Ex.: '5511999998888'. Vazio = o botão fica escondido. */
+var WHATSAPP_CANAL = '';
+
+var SHOPEE = 'https://s.shopee.com.br/';
+var LINKS = {
+  mochila: SHOPEE + '40hzl3vEJT',
+  socorros: SHOPEE + '8AXYin49Nb',
+  manta: SHOPEE + '2VtByQ6qKz',
+  apito: SHOPEE + '4fxgYPGC6W',
+  galao: SHOPEE + '7VHrvcaLL8',
+  lanterna: SHOPEE + '9AQ5a7YWhZ',
+  radio: SHOPEE + '2LZnPczPJI',
+  powerbank: SHOPEE + '3VlipQaDzW',
+  // Links abaixo gerados com Sub_id "sitekit" (aparecem assim no relatório de cliques da Shopee)
+  pilhas: SHOPEE + '40i1J5jZfK',
+  estanque: SHOPEE + '60T5hRCC5H',
+  ventilador: SHOPEE + '7Af35a7kiW',
+  mascara: SHOPEE + '70LctH8O3V',
+  soro: SHOPEE + '6q2Cgy91OU',
+  mochilainfantil: SHOPEE + '6fimUf9ejT',
+  abridor: SHOPEE + '9fMO4CX67I',
+  caixatermica: SHOPEE + '9pfoGVWSmL',
+  portadocs: SHOPEE + '2LZlm7gKcS',
+  // Estoque de água e comida
+  clorin: SHOPEE + '7KyTIe1GMI',
+  filtrobarro: SHOPEE + 'LohOxX235',
+  galao20: SHOPEE + '6L5w6piOxB',
+  garrafapet: SHOPEE + '5fqFJbkwIz',
+  absorvente: SHOPEE + '5LDOuzmCyx',
+  bombona80: SHOPEE + '1gK6YGqTvb',
+  balde: SHOPEE + 'LohOxB29i',
+  // Sobrevivência
+  sacodormir: SHOPEE + '8VAQhNujNX',
+  fogareiro: SHOPEE + '9zzEU8p1Kq',
+  lona: SHOPEE + '8pnH5Phbcu',
+  poncho: SHOPEE + '9pfoHFdnb4',
+  ferrodefogo: SHOPEE + '6q2Chj3AN9',
+  canivete: SHOPEE + '7pujtYzMLN',
+  paracord: SHOPEE + '7fbJhFzzgK',
+  lanternacabeca: SHOPEE + '9V2xsdf4Gy',
+  radiomanivela: SHOPEE + '9KjXgKfhbx',
+  powerbanksolar: SHOPEE + '9fMO4weQw3',
+  lampiao: SHOPEE + 'qkzYjtecS',
+  barraca: SHOPEE + '5Atyk2Em0l',
+  fita: SHOPEE + '4fxi97Gg1c',
+  pilhasalc: SHOPEE + '4qH8LQG2gf',
+  walkie: SHOPEE + '5LDOwLE8fo',
+  lixo: SHOPEE + '3qObAoxCWD',
+  // Enchente, calor, velas, corda
+  coleteadulto: SHOPEE + '1W0gOsok2q',
+  coletecrianca: SHOPEE + '1LhGCZpNNp',
+  bota: SHOPEE + 'AUvV7cyAKb',
+  luva: SHOPEE + '9V2xvn1yMN',
+  repelente: SHOPEE + '9KjXjU2bhK',
+  protetor: SHOPEE + 'AKc4vJynfY',
+  corda: SHOPEE + '9zzEWi04LW',
+  vela: SHOPEE + '2VtDawo4uu',
+  chapeu: SHOPEE + '8VAQkr51H9'
+  // ainda sem link: refil de gás, higiene (papel, lenço, sabão, saco de lixo, hipoclorito), comida de longa duração
+};
+
+var REGIOES = {
+  sul: { nome: 'Sul', titulo: 'Chuva forte e enchente', texto: 'Com um El Niño forte, aumenta a chance de chuva acima da média no Sul, com alagamentos, deslizamentos e temporais. Documentos protegidos da água e uma rota de fuga conhecida valem muito.' },
+  sudeste: { nome: 'Sudeste', titulo: 'Temporal e calor ao mesmo tempo', texto: 'O Sudeste tem dois cenários juntos: chuva forte e temporais (principalmente SP, RJ e centro-sul de MG) e temperatura acima da média. Em algumas áreas pode chover menos. O temporal derruba energia e o calor pesa sobre água e luz.' },
+  nne: { nome: 'Norte e Nordeste', titulo: 'Pouca chuva, calor e seca', texto: 'Com um El Niño forte, aumenta a chance de chuva abaixo da média, calor, rios e reservatórios baixos e queimadas. Guardar água é a prioridade.' },
+  co: { nome: 'Centro-Oeste', titulo: 'Estação chuvosa atrasada e ar seco', texto: 'Aumenta a chance de a estação chuvosa atrasar, com calor, ar muito seco e queimadas. Água, hidratação e proteção das vias respiratórias entram na frente.' }
+};
+
+var LS = 'kit-preparo-v1';
+var S = { regiao: '', pessoas: 3, moradia: 'casa', crianca: false, idoso: false, pet: false, remedio: false, feito: {} };
+
+function load() {
+  try { var r = localStorage.getItem(LS); if (r) { var o = JSON.parse(r); for (var k in o) if (k in S) S[k] = o[k]; } } catch (e) {}
+}
+function save() { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) {} }
+
+function up(n) { return Math.max(1, Math.ceil(n)); }
+
+function enchente(p) {
+  var a = [];
+  a.push({ id: 'r-colete', nome: 'Colete salva-vidas', qtd: p + '', why: 'Para enchente forte ou se precisar sair com água na rua. Escolha pelo peso de cada pessoa e teste o ajuste em casa.', link: LINKS.coleteadulto });
+  if (S.crianca) a.push({ id: 'r-coletecrianca', nome: 'Colete salva-vidas para criança ou adolescente (até 60 kg)', qtd: '1 por criança', why: 'Brinquedo de piscina ou boia inflável não serve como proteção em enchente. Use colete com peso indicado.', link: LINKS.coletecrianca });
+  a.push({ id: 'r-bota', nome: 'Bota de borracha (galocha) de cano longo', qtd: p + ' pares', why: 'Água de enchente carrega esgoto e objetos cortantes. Proteja os pés na limpeza.', link: LINKS.bota });
+  a.push({ id: 'r-luva', nome: 'Luvas de borracha', qtd: '1 kit', why: 'Para limpar a casa depois que a água baixar. Lave as mãos e troque de luva se rasgar.', link: LINKS.luva });
+  a.push({ id: 'r-repelente', nome: 'Repelente de insetos', qtd: '1 por pessoa', why: 'Depois da enchente a água parada cria mosquito. Passe nos braços, pernas e pescoço.', link: LINKS.repelente });
+  return a;
+}
+
+function montar() {
+  var p = S.pessoas, litros = p * 6, g = [];
+
+  var base = [];
+  base.push({ id: 'agua', nome: 'Água para beber e cozinhar', qtd: litros + ' litros', why: 'Dois litros por pessoa por dia, durante 72 horas.' });
+  base.push({ id: 'galao', nome: 'Galão dobrável para guardar a água', qtd: 'o suficiente para ' + litros + ' L', why: 'Confira a capacidade do galão antes de comprar.', link: LINKS.galao });
+  base.push({ id: 'comida', nome: 'Comida que não precisa de geladeira', qtd: '3 dias para ' + p + (p === 1 ? ' pessoa' : ' pessoas'), why: 'Frutas secas, barras de cereal, biscoitos e enlatados. Inclua um abridor de latas manual, prato, copo e talher descartáveis.' });
+  base.push({ id: 'abridor', nome: 'Abridor de latas manual', qtd: '1', why: 'Sem ele, a lata vira enfeite. Não depende de energia.', link: LINKS.abridor });
+  g.push({ titulo: 'Água e comida', itens: base });
+
+  var est = [];
+  est.push({ id: 'e-clorin', nome: 'Pastilhas para purificar a água', qtd: '1 kit', why: 'Para tornar a água de fonte duvidosa própria para beber. Siga a dose do fabricante na embalagem.', link: LINKS.clorin });
+  est.push({ id: 'e-filtro', nome: 'Filtro de água com vela', qtd: '1', why: 'Tira a sujeira da água antes de tratar. Filtrar e depois tratar é mais seguro do que só um dos dois.', link: LINKS.filtrobarro });
+  est.push({ id: 'e-galao20', nome: 'Galão rígido de 20 L', qtd: up(litros / 20) + '', why: 'Reserva de água potável. Lave bem antes de encher e troque a água a cada poucos meses.', link: LINKS.galao20 });
+  est.push({ id: 'e-pet', nome: 'Garrafas PET de 2 L com tampa', qtd: up(litros / 2) + ' garrafas', why: 'Barato e fácil de distribuir pela casa. Encha, feche e guarde longe do sol.', link: LINKS.garrafapet });
+  est.push({ id: 'e-bombona', nome: 'Bombona de 80 L', qtd: '1', why: 'Reserva grande. Confira na descrição se é própria para água de beber. Se não for, use para limpeza e descarga.', link: LINKS.bombona80 });
+  est.push({ id: 'e-balde', nome: 'Balde com tampa', qtd: '1 a 2', why: 'Água para descarga, banho e limpeza. Assim a água de beber dura mais.', link: LINKS.balde });
+  est.push({ id: 'e-absorvente', nome: 'Absorvente de oxigênio para guardar comida seca', qtd: '1 pacote', why: 'Arroz, feijão, farinha e macarrão duram mais em pote bem fechado com o absorvente. Não use em comida úmida.', link: LINKS.absorvente });
+  g.push({ titulo: 'Estoque de água e comida', itens: est });
+
+  var luz = [];
+  luz.push({ id: 'lanterna', nome: 'Lanterna', qtd: Math.max(2, p) + '', why: 'Uma por pessoa, no mínimo duas. Teste hoje e guarde as pilhas separadas.', link: LINKS.lanterna });
+  luz.push({ id: 'pilhas', nome: 'Pilhas AA recarregáveis', qtd: 'um jogo por aparelho', why: 'Confira o tipo de pilha que a sua lanterna e o seu rádio usam. Guarde fora do aparelho para não descarregar.', link: LINKS.pilhas });
+  luz.push({ id: 'pilhasalc', nome: 'Pilhas alcalinas AA e AAA (reserva)', qtd: '1 kit', why: 'Pilha comum dura bastante guardada. Deixe um jogo fechado na embalagem para lanterna, rádio e controles.', link: LINKS.pilhasalc });
+  luz.push({ id: 'vela', nome: 'Velas brancas de 4 horas', qtd: (p * 4) + ' velas', why: 'Reserva de luz barata. Use em suporte firme, longe de cortina e de criança, e nunca deixe acesa sem ninguém olhando. Lanterna é mais segura.', link: LINKS.vela });
+  luz.push({ id: 'walkie', nome: 'Rádios comunicadores (walkie-talkie)', qtd: '1 par', why: 'Funcionam sem celular nem internet. O alcance real é curto em área urbana. Confira a homologação da Anatel no anúncio.', link: LINKS.walkie });
+  luz.push({ id: 'radio', nome: 'Rádio portátil AM/FM (bateria recarregável ou pilha)', qtd: '1', why: 'Se o celular ou a internet falharem, você acompanha as orientações das autoridades. Funciona com a bateria ou com pilha, então serve mesmo sem tomada.', link: LINKS.radio });
+  luz.push({ id: 'powerbank', nome: 'Power bank', qtd: up(p / 2) + '', why: 'Mantém o celular vivo por mais tempo. Carregue antes de qualquer tempestade.', link: LINKS.powerbank });
+  g.push({ titulo: 'Luz e comunicação', itens: luz });
+
+  var seg = [];
+  seg.push({ id: 'mochila', nome: 'Mochila de fácil acesso', qtd: up(p / 2) + '', why: 'Guarde o kit num lugar que você alcança rápido, mesmo no escuro.', link: LINKS.mochila });
+  seg.push({ id: 'socorros', nome: 'Kit de primeiros socorros + álcool em gel', qtd: '1', why: 'Curativos, gaze, esparadrapo e antisséptico.', link: LINKS.socorros });
+  seg.push({ id: 'manta', nome: 'Manta térmica', qtd: p + '', why: 'Ocupa pouco espaço e ajuda a manter o calor do corpo.', link: LINKS.manta });
+  seg.push({ id: 'apito', nome: 'Apito', qtd: p + '', why: 'Ajuda a ser encontrado quando a voz não alcança.', link: LINKS.apito });
+  seg.push({ id: 'docs', nome: 'Documentos em cópia, em embalagem impermeável', qtd: '1 pasta', why: 'Assim ficam protegidos da umidade. Anote num papel os telefones 199 e 193.', link: LINKS.portadocs });
+  g.push({ titulo: 'Segurança e documentos', itens: seg });
+
+  var sob = [];
+  sob.push({ id: 's-sacodormir', nome: 'Saco de dormir', qtd: p + '', why: 'Para o frio e para dormir fora de casa se precisar sair. Confira a faixa de temperatura do produto.', link: LINKS.sacodormir });
+  sob.push({ id: 's-lona', nome: 'Lona impermeável', qtd: '1', why: 'Vira abrigo, cobertura e proteção contra chuva. Leve uma corda junto.', link: LINKS.lona });
+  sob.push({ id: 's-poncho', nome: 'Capa de chuva (poncho)', qtd: p + '', why: 'Chuva forte e frio juntos tiram o calor do corpo. Ocupa quase nada na mochila.', link: LINKS.poncho });
+  sob.push({ id: 's-barraca', nome: 'Barraca para 2 pessoas', qtd: up(p / 2) + '', why: 'Abrigo seco se a casa ficar inabitável. Monte uma vez em casa para aprender e conferir se está completa.', link: LINKS.barraca });
+  sob.push({ id: 's-corda', nome: 'Corda de nylon 10 m', qtd: '1 kit', why: 'Para amarrar a lona, varal e improvisos. Não use como corda de resgate para sustentar o peso de uma pessoa.', link: LINKS.corda });
+  sob.push({ id: 's-fita', nome: 'Fita isolante', qtd: '1 rolo', why: 'Conserta fio, vedação e improvisos. Não use para emendar fio ligado na energia.', link: LINKS.fita });
+  sob.push({ id: 's-fogareiro', nome: 'Fogareiro portátil a gás', qtd: '1', why: 'Para esquentar comida e água. Use só ao ar livre ou muito bem ventilado, nunca em quarto fechado (risco de monóxido de carbono). Compre o refil de gás compatível e guarde em lugar ventilado.', link: LINKS.fogareiro });
+  sob.push({ id: 's-ferro', nome: 'Ferro de fogo (fire starter)', qtd: '1', why: 'Acende fogo mesmo molhado. Use só em área aberta e segura.', link: LINKS.ferrodefogo });
+  sob.push({ id: 's-canivete', nome: 'Canivete multifunção', qtd: '1', why: 'Corta, abre lata, aperta parafuso. Guarde fora do alcance de criança.', link: LINKS.canivete });
+  sob.push({ id: 's-paracord', nome: 'Pulseira paracord com bússola e apito', qtd: '1', why: 'Cordão resistente que cabe no pulso, com bússola e apito de sinalização.', link: LINKS.paracord });
+  sob.push({ id: 's-cabeca', nome: 'Lanterna de cabeça', qtd: Math.max(1, p) + '', why: 'Deixa as duas mãos livres para cozinhar, carregar ou cuidar de alguém no escuro.', link: LINKS.lanternacabeca });
+  sob.push({ id: 's-lampiao', nome: 'Lampião solar', qtd: '1', why: 'Ilumina o cômodo inteiro e recarrega no sol, sem precisar de tomada.', link: LINKS.lampiao });
+  sob.push({ id: 's-manivela', nome: 'Rádio de manivela ou solar', qtd: '1', why: 'Funciona mesmo quando as pilhas acabam. Também carrega o celular em alguns modelos.', link: LINKS.radiomanivela });
+  sob.push({ id: 's-pbsolar', nome: 'Power bank solar de 20.000 mAh', qtd: '1', why: 'Reserva de energia maior para o celular. O carregamento solar é lento, use como apoio.', link: LINKS.powerbanksolar });
+  g.push({ titulo: 'Sobrevivência (para ir além do básico)', itens: sob });
+
+  var hig = [];
+  hig.push({ id: 'h-papel', nome: 'Papel higiênico e lenços umedecidos', qtd: '1 pacote por semana de estoque', why: 'Sem água encanada, a higiene vira problema rápido.' });
+  hig.push({ id: 'h-lixo', nome: 'Sacos de lixo resistentes', qtd: '1 rolo', why: 'Para lixo, para improvisar o vaso sanitário e para proteger coisas da água.', link: LINKS.lixo });
+  hig.push({ id: 'h-sabao', nome: 'Sabão, sabonete e álcool em gel', qtd: '1 de cada', why: 'Lavar as mãos evita a maior parte das doenças depois de uma tragédia.' });
+  hig.push({ id: 'h-cloro', nome: 'Água sanitária comum (sem perfume) para desinfetar', qtd: '1 frasco', why: 'Use só para desinfetar superfícies. Para água de beber, siga a orientação da Defesa Civil ou use pastilhas.' });
+  hig.push({ id: 'h-gas', nome: 'Refil de gás para o fogareiro', qtd: '2', why: 'Sem o refil, o fogareiro não serve. Guarde em lugar ventilado e longe do calor.' });
+  g.push({ titulo: 'Higiene e saneamento', itens: hig });
+
+  var ex = [];
+  if (S.crianca) {
+    ex.push({ id: 'x-crianca', nome: 'Itens da criança', qtd: '3 dias', why: 'Fralda, leite ou fórmula, lanche e um brinquedo para acalmar.' });
+    ex.push({ id: 'x-mochilainfantil', nome: 'Mochila infantil', qtd: '1 por criança', why: 'A criança leva o próprio lanche, uma troca de roupa e um brinquedo. Dá autonomia e acalma.', link: LINKS.mochilainfantil });
+  }
+  if (S.idoso) ex.push({ id: 'x-idoso', nome: 'Itens da pessoa idosa', qtd: '3 dias', why: 'Remédios com cópia da receita, óculos reserva e apoio para andar, se usar.' });
+  if (S.pet) ex.push({ id: 'x-pet', nome: 'Ração e água do pet', qtd: '3 dias', why: 'Coleira com guia, cópia da carteira de vacina e uma vasilha.' });
+  if (S.remedio) ex.push({ id: 'x-remedio', nome: 'Remédios de uso contínuo + bateria ou carregador extra', qtd: 'reserva + cópia da receita', why: 'Quem usa medidor de glicose ou outro aparelho elétrico deve ter bateria ou carregador reserva.' });
+  if (S.moradia === 'apto') ex.push({ id: 'x-apto', nome: 'Reserva extra de água', qtd: 'some ao total', why: 'Sem energia, o elevador e a bomba d\'água do prédio podem parar. Água guardada pesa mais no apartamento.' });
+  else ex.push({ id: 'x-casa', nome: 'Saber onde ficam o registro de água e o disjuntor geral', qtd: '1 conferência', why: 'Em casa, você mesmo corta a energia e a água se precisar. Ensine a todos.' });
+  g.push({ titulo: 'Para o seu perfil', itens: ex });
+
+  var r = S.regiao, extra = [];
+  if (r === 'sul') {
+    extra.push({ id: 'r-estanque', nome: 'Saco estanque para documentos e celular', qtd: '1 a 2', why: 'Protege da água em alagamento.', link: LINKS.estanque });
+    extra.push({ id: 'r-rota', nome: 'Rota de fuga e ponto alto combinados', qtd: 'conversa de 10 min', why: 'Combine com a família para onde ir se a água subir.' });
+    enchente(p).forEach(function (x) { extra.push(x); });
+  } else if (r === 'sudeste') {
+    extra.push({ id: 'r-ventilador', nome: 'Ventilador portátil recarregável', qtd: '1', why: 'Para o calor quando a energia cai. Carregue o ventilador junto com o celular.', link: LINKS.ventilador });
+    extra.push({ id: 'r-caixa', nome: 'Caixa térmica', qtd: '1', why: 'Ajuda a conservar remédios e comida por mais tempo no calor.', link: LINKS.caixatermica });
+    extra.push({ id: 'r-estanque', nome: 'Saco estanque para documentos e celular', qtd: '1', why: 'Para o temporal forte e o alagamento.', link: LINKS.estanque });
+    enchente(p).forEach(function (x) { extra.push(x); });
+    extra.push({ id: 'r-chapeu', nome: 'Chapéu de aba larga', qtd: p + '', why: 'Protege a cabeça e o pescoço do sol forte e ajuda a evitar insolação. Beba água mesmo sem sede e procure sombra nas horas mais quentes.', link: LINKS.chapeu });
+    extra.push({ id: 'r-protetor', nome: 'Protetor solar FPS 50', qtd: '1 por pessoa', why: 'Calor forte e sol: proteja a pele, principalmente de criança e idoso.', link: LINKS.protetor });
+  } else if (r === 'nne') {
+    extra.push({ id: 'r-filtro', nome: 'Filtro de barro ou filtro portátil', qtd: '1', why: 'Em seca, a água disponível pode vir de fonte duvidosa. Filtrar ajuda.', link: LINKS.filtrobarro });
+    extra.push({ id: 'r-chapeu', nome: 'Chapéu de aba larga', qtd: p + '', why: 'Protege a cabeça e o pescoço do sol forte e ajuda a evitar insolação. Beba água mesmo sem sede e procure sombra nas horas mais quentes.', link: LINKS.chapeu });
+    extra.push({ id: 'r-protetor', nome: 'Protetor solar FPS 50', qtd: '1 por pessoa', why: 'Calor e sol forte na seca: proteja a pele, principalmente de criança e idoso.', link: LINKS.protetor });
+    extra.push({ id: 'r-agua', nome: 'Reserva de água acima do mínimo', qtd: 'o que couber', why: 'A estiagem pode durar mais que 72 horas.' });
+  } else if (r === 'co') {
+    extra.push({ id: 'r-mascara', nome: 'Máscara PFF2', qtd: p + '', why: 'Ajuda quando há fumaça de queimada no ar. Escolha uma com número de CA e vede bem no rosto.', link: LINKS.mascara });
+    extra.push({ id: 'r-chapeu', nome: 'Chapéu de aba larga', qtd: p + '', why: 'Protege a cabeça e o pescoço do sol forte e ajuda a evitar insolação. Beba água mesmo sem sede e procure sombra nas horas mais quentes.', link: LINKS.chapeu });
+    extra.push({ id: 'r-protetor', nome: 'Protetor solar FPS 50', qtd: '1 por pessoa', why: 'Calor e sol forte: proteja a pele, principalmente de criança e idoso.', link: LINKS.protetor });
+    extra.push({ id: 'r-soro', nome: 'Soro fisiológico', qtd: '1 por pessoa', why: 'Alivia o ressecamento do nariz no ar seco.', link: LINKS.soro });
+  }
+  if (extra.length) g.push({ titulo: 'Para a sua região: ' + REGIOES[r].nome, itens: extra });
+  return g;
+}
+
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+var lastR = null;
+function render(o) {
+  o = o || {};
+  var r = S.regiao, box = document.getElementById('risk');
+  if (r && REGIOES[r]) {
+    box.className = 'on';
+    box.innerHTML = '<span class="pill">Risco que mais pesa em ' + esc(REGIOES[r].nome) + '</span><h2>' + esc(REGIOES[r].titulo) + '</h2><p>' + esc(REGIOES[r].texto) + '</p><p class="fine">Previsão é tendência e muda por cidade. Não é certeza de que vai acontecer.</p>';
+  } else {
+    box.className = '';
+    box.innerHTML = '<span class="pill">Lista básica</span><h2>Apagão pode acontecer em qualquer lugar</h2><p>Escolha a sua região lá em cima para ver o risco que mais pesa onde você mora e os itens extras dela.</p>';
+  }
+
+  if (lastR !== r) { box.classList.remove('fx'); void box.offsetWidth; box.classList.add('fx'); lastR = r; }
+
+  var groups = montar(), html = '', total = 0, ok = 0;
+  groups.forEach(function (gr) {
+    html += '<div class="group"><h3>' + esc(gr.titulo) + '</h3><ul class="items">';
+    gr.itens.forEach(function (it) {
+      var idx = total; total++;
+      var d = !!S.feito[it.id]; if (d) ok++;
+      html += '<li class="item' + (d ? ' done' : '') + (o.just === it.id ? ' just' : '') + '" style="--i:' + Math.min(idx, 18) + '"><input class="chk" type="checkbox" id="c-' + it.id + '" data-id="' + it.id + '"' + (d ? ' checked' : '') + ' aria-label="Marcar ' + esc(it.nome) + '">' +
+        '<div><label for="c-' + it.id + '" class="name">' + esc(it.nome) + '</label><span class="qty">' + esc(it.qtd) + '</span><p class="why">' + esc(it.why) + '</p></div>' +
+        (it.link ? '<a class="buy" href="' + it.link + '" target="_blank" rel="sponsored noopener">Ver na Shopee</a>' : '<span class="nolink">Compre onde preferir</span>') + '</li>';
+    });
+    html += '</ul></div>';
+  });
+  var lista = document.getElementById('lista');
+  lista.className = o.anim ? 'enter' : '';
+  lista.innerHTML = html;
+  var full = total > 0 && ok === total;
+  document.getElementById('progress').textContent = ok + ' de ' + total + ' itens marcados' + (full ? ' · kit completo' : '');
+  document.getElementById('barfill').style.width = (total ? Math.round(ok / total * 100) : 0) + '%';
+  document.querySelector('.bar').classList.toggle('full', full);
+  document.getElementById('wa').href = 'https://wa.me/?text=' + encodeURIComponent(texto());
+  var zap = document.getElementById('zap'), nota = document.getElementById('zapnote');
+  if (WHATSAPP_CANAL) {
+    var resumo = S.pessoas + (S.pessoas === 1 ? ' pessoa' : ' pessoas') + ', ' + (S.moradia === 'apto' ? 'apartamento' : 'casa') + (r && REGIOES[r] ? ', ' + REGIOES[r].nome : '') +
+      (S.crianca ? ', criança' : '') + (S.idoso ? ', idoso' : '') + (S.pet ? ', pet' : '') + (S.remedio ? ', remédio contínuo' : '');
+    zap.href = 'https://wa.me/' + WHATSAPP_CANAL + '?text=' + encodeURIComponent('Oi! Quero receber a minha lista do kit de preparo. Minha casa: ' + resumo + '.');
+    zap.hidden = false; nota.hidden = false;
+  }
+  var out = document.getElementById('pessoas');
+  out.textContent = S.pessoas;
+  if (o.bump) { out.classList.remove('bump'); void out.offsetWidth; out.classList.add('bump'); }
+}
+
+function texto() {
+  var r = S.regiao, t = 'Kit de preparo da minha casa (' + S.pessoas + (S.pessoas === 1 ? ' pessoa' : ' pessoas') + ', ' + (S.moradia === 'apto' ? 'apartamento' : 'casa') + (r && REGIOES[r] ? ', ' + REGIOES[r].nome : '') + ')\n';
+  if (r && REGIOES[r]) t += 'Risco que mais pesa: ' + REGIOES[r].titulo + '\n';
+  montar().forEach(function (gr) {
+    t += '\n' + gr.titulo.toUpperCase() + '\n';
+    gr.itens.forEach(function (it) { t += '- ' + it.nome + ' (' + it.qtd + ')' + (it.link ? ' ' + it.link : '') + '\n'; });
+  });
+  t += '\nAlerta da Defesa Civil: mande o CEP por SMS para 40199.\nFeito com a calculadora do E Se Faltar? Alguns links são de afiliado.';
+  return t;
+}
+
+function onChange() {
+  S.regiao = document.querySelector('input[name=regiao]:checked').value;
+  S.moradia = document.querySelector('input[name=moradia]:checked').value;
+  ['crianca', 'idoso', 'pet', 'remedio'].forEach(function (k) { S[k] = document.getElementById(k).checked; });
+  save(); render({ anim: true });
+}
+
+function sync() {
+  var rr = document.querySelector('input[name=regiao][value="' + S.regiao + '"]'); if (rr) rr.checked = true;
+  var mm = document.querySelector('input[name=moradia][value="' + S.moradia + '"]'); if (mm) mm.checked = true;
+  ['crianca', 'idoso', 'pet', 'remedio'].forEach(function (k) { document.getElementById(k).checked = !!S[k]; });
+}
+
+document.getElementById('f').addEventListener('change', onChange);
+document.getElementById('minus').addEventListener('click', function () { S.pessoas = Math.max(1, S.pessoas - 1); save(); render({ bump: true }); });
+document.getElementById('plus').addEventListener('click', function () { S.pessoas = Math.min(15, S.pessoas + 1); save(); render({ bump: true }); });
+document.getElementById('lista').addEventListener('change', function (e) {
+  var id = e.target && e.target.getAttribute('data-id'); if (!id) return;
+  if (e.target.checked) { S.feito[id] = true; if (window.bgPulse) window.bgPulse(); } else delete S.feito[id];
+  save(); render({ just: id });
+  var again = document.getElementById('c-' + id); if (again) again.focus();
+});
+document.getElementById('copy').addEventListener('click', function () {
+  var msg = document.getElementById('copymsg'), t = texto();
+  function ok() { msg.textContent = 'Lista copiada.'; setTimeout(function () { msg.textContent = ''; }, 2500); }
+  function fail() {
+    var ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var good = false; try { good = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    msg.textContent = good ? 'Lista copiada.' : 'Não deu para copiar. Use o botão do WhatsApp.';
+  }
+  try { navigator.clipboard.writeText(t).then(ok, fail); } catch (e) { fail(); }
+});
+
+load(); sync(); render({ anim: true });
+
+/* Fundo animado: plasma suave nas cores do canal. Renderiza pequeno e o navegador amplia (vira brilho macio).
+   Segue o ponteiro, acelera quando você marca um item, pausa com a aba escondida e fica parado se o sistema pede menos movimento. */
+(function () {
+  var c = document.getElementById('bg'); if (!c || !c.getContext) return;
+  var ctx = c.getContext('2d'), W = 128, H = 72;
+  c.width = W; c.height = H;
+  var img = ctx.createImageData(W, H), d = img.data;
+  var NAVY = [15, 27, 45], TEAL = [47, 184, 176], AMBER = [242, 163, 58];
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mx = .5, my = .5, tx = .5, ty = .5, boost = 0, t = 0, last = 0;
+  function sm(a, b, x) { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); }
+  function draw() {
+    var i = 0, y, x, u, v, f1, f2, a, b, dx, dy;
+    for (y = 0; y < H; y++) {
+      v = y / H;
+      for (x = 0; x < W; x++) {
+        u = x / W * 1.78;
+        dx = u - mx * 1.78; dy = v - my;
+        f1 = (Math.sin(u * 3 + t) + Math.sin(v * 4 - t * 1.3) + Math.sin((u + v) * 3 + t * .7) + Math.sin(Math.sqrt(dx * dx + dy * dy) * 9 - t * 1.6)) / 4;
+        f2 = (Math.sin(u * 2.2 - t * .8) + Math.sin(v * 3.1 + t * 1.1) + Math.sin((u - v) * 2.6 - t * .5)) / 3;
+        a = sm(.15, .95, (f1 + 1) / 2) * .38;
+        b = sm(.45, 1, (f2 + 1) / 2) * .26;
+        d[i]     = NAVY[0] + (TEAL[0] - NAVY[0]) * a + (AMBER[0] - NAVY[0]) * b;
+        d[i + 1] = NAVY[1] + (TEAL[1] - NAVY[1]) * a + (AMBER[1] - NAVY[1]) * b;
+        d[i + 2] = NAVY[2] + (TEAL[2] - NAVY[2]) * a + (AMBER[2] - NAVY[2]) * b;
+        d[i + 3] = 255; i += 4;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+  if (reduce) { t = 2; draw(); return; }
+  function loop(ts) {
+    requestAnimationFrame(loop);
+    if (ts - last < 33) return;
+    var dt = Math.min(.1, (ts - last) / 1000); last = ts;
+    mx += (tx - mx) * .05; my += (ty - my) * .05;
+    boost *= .96;
+    t += dt * (.45 + boost * 2.2);
+    draw();
+  }
+  window.addEventListener('pointermove', function (e) { tx = e.clientX / window.innerWidth; ty = e.clientY / window.innerHeight; }, { passive: true });
+  window.bgPulse = function () { boost = 1; };
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
