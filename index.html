@@ -86,15 +86,20 @@ input:focus-visible + .region, input:focus-visible + .opt, button:focus-visible,
 .group { margin-top: 20px; }
 .group h3 { font-family: var(--display); text-transform: uppercase; letter-spacing: .06em; font-size: 20px; color: var(--teal); margin: 0 0 8px; }
 ul.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.item { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.item { display: grid; grid-template-columns: auto 92px 1fr; gap: 6px 12px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.ph { position: relative; width: 92px; height: 92px; border-radius: 10px; overflow: hidden; background: #F4EAD5; border: 1px solid var(--line); flex: none; }
+.ph img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ph.fb { background: var(--navy); display: flex; align-items: center; justify-content: center; }
+.ph.fb svg { width: 44px; height: 44px; opacity: .8; }
+.ph .ill { position: absolute; left: 0; right: 0; bottom: 0; font-size: 10px; line-height: 1; text-align: center; padding: 3px 2px; background: rgba(15,27,45,.72); color: var(--cream); letter-spacing: .02em; }
 .item.done { opacity: .6; }
 .item.done .name { text-decoration: line-through; }
 .chk { width: 26px; height: 26px; accent-color: var(--amber); margin: 2px 0 0; }
 .name { font-weight: 600; }
 .qty { display: inline-block; font-family: var(--display); font-weight: 700; font-size: 18px; color: var(--amber); margin-left: 6px; }
 .why { color: var(--muted); font-size: 15px; margin: 2px 0 0; }
-.buy { grid-column: 2; justify-self: start; margin-top: 6px; display: inline-block; background: var(--amber); color: var(--navy); font-weight: 700; text-decoration: none; padding: 9px 16px; border-radius: 10px; }
-.nolink { grid-column: 2; color: var(--muted); font-size: 13px; margin-top: 4px; }
+.buy { grid-column: 2 / -1; justify-self: start; margin-top: 6px; display: inline-block; background: var(--amber); color: var(--navy); font-weight: 700; text-decoration: none; padding: 9px 16px; border-radius: 10px; }
+.nolink { grid-column: 2 / -1; color: var(--muted); font-size: 13px; margin-top: 4px; }
 .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
 .btn { font-family: var(--body); font-size: 16px; font-weight: 700; border-radius: 10px; padding: 12px 18px; border: 2px solid var(--amber); background: transparent; color: var(--amber); cursor: pointer; text-decoration: none; display: inline-block; }
 .btn.fill { background: var(--amber); color: var(--navy); }
@@ -119,11 +124,16 @@ footer p { margin: 0 0 8px; }
   .group h3 { color: #000 !important; }
   .item.done { opacity: 1; }
   .chk { accent-color: #000; }
+  .ph.fb { display: none !important; }
+  .ph .ill { display: none; }
   .buy { background: none !important; color: #000 !important; padding: 0; font-size: 0; font-weight: 400; word-break: break-all; text-decoration: none; }
   .buy::after { content: attr(href); font-size: 12px; }
   .onlyprint { display: block !important; margin: 8px 0 0; font-size: 15px; }
 }
 @media (max-width: 460px) {
+  .item { grid-template-columns: auto 72px 1fr; }
+  .ph { width: 72px; height: 72px; }
+  .ph .ill { display: none; }
   .checks { grid-template-columns: 1fr; }
   body { font-size: 16px; }
 }
@@ -239,6 +249,7 @@ footer p { margin: 0 0 8px; }
   <div class="progress" id="progress"></div>
 </div>
 <div class="bar" aria-hidden="true"><i id="barfill"></i></div>
+<p class="note" style="margin:0 0 4px">As fotos são só ilustrativas, para você reconhecer o item. O produto do link pode ter outra aparência.</p>
 <div id="lista"></div>
 
 <div class="actions">
@@ -260,6 +271,7 @@ footer p { margin: 0 0 8px; }
 <footer>
   <p>Alguns links levam à Shopee e o canal pode receber uma pequena comissão, sem custo extra para você. Os itens sem botão você compra onde preferir.</p>
   <p>Conteúdo informativo, não substitui a orientação da Defesa Civil. Previsão climática é tendência e muda de cidade para cidade. Fontes: Defesa Civil Nacional (kit de emergência de 72 horas e Defesa Civil Alerta), Painel El Niño do Inmet e Nota Técnica do Cemaden.</p>
+  <p>Fotos de bancos de imagem livres, a maioria apenas ilustrativa: o produto que você recebe pode ter outra aparência. <a href="creditos.html" style="color:var(--amber)">Créditos das fotos</a>.</p>
   <p>Suas respostas ficam só neste aparelho. O site não pede cadastro nem guarda seus dados.</p>
 </footer>
 </div>
@@ -272,6 +284,7 @@ var LINKS = {
   mochila: SHOPEE + '40hzl3vEJT',
   socorros: SHOPEE + '8AXYin49Nb',
   manta: SHOPEE + '2VtByQ6qKz',
+  mantakit: SHOPEE + '80EBiuOI4s',
   apito: SHOPEE + '4fxgYPGC6W',
   galao: SHOPEE + '7VHrvcaLL8',
   lanterna: SHOPEE + '9AQ5a7YWhZ',
@@ -406,6 +419,7 @@ function montar() {
   seg.push({ id: 'mochila', nome: 'Mochila de fácil acesso', qtd: up(p / 2) + '', why: 'Guarde o kit num lugar que você alcança rápido, mesmo no escuro.', link: LINKS.mochila });
   seg.push({ id: 'socorros', nome: 'Kit de primeiros socorros + álcool em gel', qtd: '1', why: 'Curativos, gaze, esparadrapo e antisséptico.', link: LINKS.socorros });
   seg.push({ id: 'manta', nome: 'Manta térmica', qtd: p + '', why: 'Ocupa pouco espaço e ajuda a manter o calor do corpo.', link: LINKS.manta });
+  seg.push({ id: 'mantakit', nome: 'Kit com 5 mantas térmicas de alumínio (2,10 x 1,40 m)', qtd: up(p / 5) + (up(p / 5) === 1 ? ' kit' : ' kits'), why: 'Cada kit traz 5 mantas, o que cobre uma família de até 5 pessoas. Mantém o calor do corpo e serve também para frio, chuva e resgate.', link: LINKS.mantakit });
   seg.push({ id: 'apito', nome: 'Apito', qtd: p + '', why: 'Ajuda a ser encontrado quando a voz não alcança.', link: LINKS.apito });
   seg.push({ id: 'docs', nome: 'Documentos em cópia, em embalagem impermeável', qtd: '1 pasta', why: 'Assim ficam protegidos da umidade. Anote num papel os telefones 199 e 193.', link: LINKS.portadocs });
   g.push({ titulo: 'Segurança e documentos', itens: seg });
@@ -476,6 +490,19 @@ function montar() {
 
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
+/* ====== FOTOS DOS ITENS ======
+   Cada item usa fotos/<id>.jpg. FOTOS lista os ids que têm foto; quem não tem mostra um ícone.
+   ILUSTRATIVA: itens em que a foto é só uma referência do tipo de coisa, não do produto exato. */
+var FOTOS = {'abridor':1,'agua':1,'apito':1,'comida':1,'docs':1,'e-absorvente':1,'e-balde':1,'e-bombona':1,'e-clorin':1,'e-galao20':1,'e-pet':1,'galao':1,'h-cloro':1,'h-gas':1,'h-lixo':1,'h-papel':1,'h-sabao':1,'lanterna':1,'manta':1,'pilhas':1,'pilhasalc':1,'powerbank':1,'r-bota':1,'r-caixa':1,'r-chapeu':1,'r-colete':1,'r-coletecrianca':1,'r-estanque':1,'r-filtro':1,'r-luva':1,'r-mascara':1,'r-protetor':1,'r-repelente':1,'r-rota':1,'r-soro':1,'r-ventilador':1,'radio':1,'s-barraca':1,'s-cabeca':1,'s-canivete':1,'s-corda':1,'s-ferro':1,'s-fita':1,'s-fogareiro':1,'s-lampiao':1,'s-lona':1,'s-paracord':1,'s-pbsolar':1,'s-poncho':1,'s-sacodormir':1,'socorros':1,'vela':1,'walkie':1,'x-apto':1,'x-casa':1,'x-crianca':1,'x-mochilainfantil':1,'x-pet':1,'x-remedio':1};
+var FOTO_DE = { mantakit: 'manta', mochila: 'x-mochilainfantil', 'e-filtro': 'r-filtro', 'r-agua': 'e-galao20', 's-manivela': 'radio' };
+var ILUSTRATIVA = {};
+var ICONE = '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="14" width="30" height="26" rx="4" fill="none" stroke="#F2A33A" stroke-width="3"/><path d="M17 14v-3a7 7 0 0 1 14 0v3" fill="none" stroke="#F2A33A" stroke-width="3"/></svg>';
+function foto(it) {
+  var k = FOTO_DE[it.id] || it.id;
+  if (!FOTOS[k]) return '<div class="ph fb">' + ICONE + '</div>';
+  return '<div class="ph"><img src="fotos/' + k + '.jpg" alt="' + esc(it.nome) + '" loading="lazy" width="92" height="92" onerror="this.parentNode.className=\'ph fb\';this.parentNode.innerHTML=ICONE">' + (ILUSTRATIVA[k] ? '<span class="ill">imagem ilustrativa</span>' : '') + '</div>';
+}
+
 var lastR = null;
 function render(o) {
   o = o || {};
@@ -497,7 +524,7 @@ function render(o) {
       var idx = total; total++;
       var d = !!S.feito[it.id]; if (d) ok++;
       html += '<li class="item' + (d ? ' done' : '') + (o.just === it.id ? ' just' : '') + '" style="--i:' + Math.min(idx, 18) + '"><input class="chk" type="checkbox" id="c-' + it.id + '" data-id="' + it.id + '"' + (d ? ' checked' : '') + ' aria-label="Marcar ' + esc(it.nome) + '">' +
-        '<div><label for="c-' + it.id + '" class="name">' + esc(it.nome) + '</label><span class="qty">' + esc(it.qtd) + '</span><p class="why">' + esc(it.why) + '</p></div>' +
+        foto(it) + '<div><label for="c-' + it.id + '" class="name">' + esc(it.nome) + '</label><span class="qty">' + esc(it.qtd) + '</span><p class="why">' + esc(it.why) + '</p></div>' +
         (it.link ? '<a class="buy" href="' + it.link + '" target="_blank" rel="sponsored noopener">Ver na Shopee</a>' : '<span class="nolink">Compre onde preferir</span>') + '</li>';
     });
     html += '</ul></div>';
