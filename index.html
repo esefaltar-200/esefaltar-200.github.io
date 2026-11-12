@@ -271,7 +271,7 @@ footer p { margin: 0 0 8px; }
 <footer>
   <p>Alguns links levam à Shopee e o canal pode receber uma pequena comissão, sem custo extra para você. Os itens sem botão você compra onde preferir.</p>
   <p>Conteúdo informativo, não substitui a orientação da Defesa Civil. Previsão climática é tendência e muda de cidade para cidade. Fontes: Defesa Civil Nacional (kit de emergência de 72 horas e Defesa Civil Alerta), Painel El Niño do Inmet e Nota Técnica do Cemaden.</p>
-  <p>Fotos de bancos de imagem livres, a maioria apenas ilustrativa: o produto que você recebe pode ter outra aparência. <a href="creditos.html" style="color:var(--amber)">Créditos das fotos</a>.</p>
+  <p>As fotos dos produtos vêm dos anúncios na Shopee e podem mudar se o vendedor alterar o anúncio. Itens sem link usam fotos de bancos livres (<a href="creditos.html" style="color:var(--amber)">créditos</a>).</p>
   <p>Suas respostas ficam só neste aparelho. O site não pede cadastro nem guarda seus dados.</p>
 </footer>
 </div>
@@ -306,7 +306,7 @@ var LINKS = {
   galao20: SHOPEE + '6L5w6piOxB',
   garrafapet: SHOPEE + '5fqFJbkwIz',
   absorvente: SHOPEE + '5LDOuzmCyx',
-  bombona80: SHOPEE + '1gK6YGqTvb',
+  bombona5: SHOPEE + '9zzCuiIhfr',
   balde: SHOPEE + 'LohOxB29i',
   // Sobrevivência
   sacodormir: SHOPEE + '8VAQhNujNX',
@@ -319,7 +319,7 @@ var LINKS = {
   lanternacabeca: SHOPEE + '9V2xsdf4Gy',
   radiomanivela: SHOPEE + '9KjXgKfhbx',
   powerbanksolar: SHOPEE + '9fMO4weQw3',
-  lampiao: SHOPEE + 'qkzYjtecS',
+  lampiaousb: SHOPEE + '40hzQACi3W',
   barraca: SHOPEE + '5Atyk2Em0l',
   fita: SHOPEE + '4fxi97Gg1c',
   pilhasalc: SHOPEE + '4qH8LQG2gf',
@@ -400,7 +400,7 @@ function montar() {
   est.push({ id: 'e-filtro', nome: 'Filtro de água com vela', qtd: '1', why: 'Tira a sujeira da água antes de tratar. Filtrar e depois tratar é mais seguro do que só um dos dois.', link: LINKS.filtrobarro });
   est.push({ id: 'e-galao20', nome: 'Galão rígido de 20 L', qtd: up(litros / 20) + '', why: 'Reserva de água potável. Lave bem antes de encher e troque a água a cada poucos meses.', link: LINKS.galao20 });
   est.push({ id: 'e-pet', nome: 'Garrafas PET de 2 L com tampa', qtd: up(litros / 2) + ' garrafas', why: 'Barato e fácil de distribuir pela casa. Encha, feche e guarde longe do sol.', link: LINKS.garrafapet });
-  est.push({ id: 'e-bombona', nome: 'Bombona de 80 L', qtd: '1', why: 'Reserva grande. Confira na descrição se é própria para água de beber. Se não for, use para limpeza e descarga.', link: LINKS.bombona80 });
+  est.push({ id: 'e-bombona', nome: 'Bombonas de 5 L com alça e tampa (kit com 7)', qtd: '1 kit', why: 'Fácil de carregar e de distribuir pela casa. Lave bem antes de encher e confira na descrição se é própria para água de beber.', link: LINKS.bombona5 });
   est.push({ id: 'e-balde', nome: 'Balde com tampa', qtd: '1 a 2', why: 'Água para descarga, banho e limpeza. Assim a água de beber dura mais.', link: LINKS.balde });
   est.push({ id: 'e-absorvente', nome: 'Absorvente de oxigênio para guardar comida seca', qtd: '1 pacote', why: 'Arroz, feijão, farinha e macarrão duram mais em pote bem fechado com o absorvente. Não use em comida úmida.', link: LINKS.absorvente });
   g.push({ titulo: 'Estoque de água e comida', itens: est });
@@ -436,7 +436,7 @@ function montar() {
   sob.push({ id: 's-canivete', nome: 'Canivete multifunção', qtd: '1', why: 'Corta, abre lata, aperta parafuso. Guarde fora do alcance de criança.', link: LINKS.canivete });
   sob.push({ id: 's-paracord', nome: 'Pulseira paracord com bússola e apito', qtd: '1', why: 'Cordão resistente que cabe no pulso, com bússola e apito de sinalização.', link: LINKS.paracord });
   sob.push({ id: 's-cabeca', nome: 'Lanterna de cabeça', qtd: Math.max(1, p) + '', why: 'Deixa as duas mãos livres para cozinhar, carregar ou cuidar de alguém no escuro.', link: LINKS.lanternacabeca });
-  sob.push({ id: 's-lampiao', nome: 'Lampião solar', qtd: '1', why: 'Ilumina o cômodo inteiro e recarrega no sol, sem precisar de tomada.', link: LINKS.lampiao });
+  sob.push({ id: 's-lampiao', nome: 'Lampião LED recarregável (USB)', qtd: '1', why: 'Ilumina o cômodo inteiro. Mantenha carregado e recarregue no power bank se faltar luz.', link: LINKS.lampiaousb });
   sob.push({ id: 's-manivela', nome: 'Rádio de manivela ou solar', qtd: '1', why: 'Funciona mesmo quando as pilhas acabam. Também carrega o celular em alguns modelos.', link: LINKS.radiomanivela });
   sob.push({ id: 's-pbsolar', nome: 'Power bank solar de 20.000 mAh', qtd: '1', why: 'Reserva de energia maior para o celular. O carregamento solar é lento, use como apoio.', link: LINKS.powerbanksolar });
   g.push({ titulo: 'Sobrevivência (para ir além do básico)', itens: sob });
@@ -493,14 +493,30 @@ function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').
 /* ====== FOTOS DOS ITENS ======
    Cada item usa fotos/<id>.jpg. FOTOS lista os ids que têm foto; quem não tem mostra um ícone.
    ILUSTRATIVA: itens em que a foto é só uma referência do tipo de coisa, não do produto exato. */
-var FOTOS = {'abridor':1,'agua':1,'apito':1,'comida':1,'docs':1,'e-absorvente':1,'e-balde':1,'e-bombona':1,'e-clorin':1,'e-galao20':1,'e-pet':1,'galao':1,'h-cloro':1,'h-gas':1,'h-lixo':1,'h-papel':1,'h-sabao':1,'lanterna':1,'manta':1,'pilhas':1,'pilhasalc':1,'powerbank':1,'r-bota':1,'r-caixa':1,'r-chapeu':1,'r-colete':1,'r-coletecrianca':1,'r-estanque':1,'r-filtro':1,'r-luva':1,'r-mascara':1,'r-protetor':1,'r-repelente':1,'r-rota':1,'r-soro':1,'r-ventilador':1,'radio':1,'s-barraca':1,'s-cabeca':1,'s-canivete':1,'s-corda':1,'s-ferro':1,'s-fita':1,'s-fogareiro':1,'s-lampiao':1,'s-lona':1,'s-paracord':1,'s-pbsolar':1,'s-poncho':1,'s-sacodormir':1,'socorros':1,'vela':1,'walkie':1,'x-apto':1,'x-casa':1,'x-crianca':1,'x-mochilainfantil':1,'x-pet':1,'x-remedio':1};
+var FOTOS = {'abridor':1,'agua':1,'apito':1,'comida':1,'docs':1,'e-absorvente':1,'e-balde':1,'e-clorin':1,'e-galao20':1,'e-pet':1,'galao':1,'h-cloro':1,'h-gas':1,'h-lixo':1,'h-papel':1,'h-sabao':1,'lanterna':1,'manta':1,'pilhas':1,'pilhasalc':1,'powerbank':1,'r-bota':1,'r-caixa':1,'r-chapeu':1,'r-colete':1,'r-coletecrianca':1,'r-estanque':1,'r-filtro':1,'r-luva':1,'r-mascara':1,'r-protetor':1,'r-repelente':1,'r-rota':1,'r-soro':1,'r-ventilador':1,'radio':1,'s-barraca':1,'s-cabeca':1,'s-canivete':1,'s-corda':1,'s-ferro':1,'s-fita':1,'s-fogareiro':1,'s-lona':1,'s-paracord':1,'s-pbsolar':1,'s-poncho':1,'s-sacodormir':1,'socorros':1,'vela':1,'walkie':1,'x-apto':1,'x-casa':1,'x-crianca':1,'x-mochilainfantil':1,'x-pet':1,'x-remedio':1};
 var FOTO_DE = { mantakit: 'manta', mochila: 'x-mochilainfantil', 'e-filtro': 'r-filtro', 'r-agua': 'e-galao20', 's-manivela': 'radio' };
 var ILUSTRATIVA = {};
 var ICONE = '<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="14" width="30" height="26" rx="4" fill="none" stroke="#F2A33A" stroke-width="3"/><path d="M17 14v-3a7 7 0 0 1 14 0v3" fill="none" stroke="#F2A33A" stroke-width="3"/></svg>';
+/* Foto do anúncio na Shopee, carregada direto de lá (sem cópia). Chave = nome em LINKS.
+   Se a imagem falhar (vendedor trocou ou apagou), cai para a foto de banco livre em fotos/ e depois para o ícone. */
+var SHOPEE_IMG_BASE = 'https://down-br.img.susercontent.com/file/';
+var SHOPEE_IMG = {abridor:'br-11134207-820md-mu23ktfzkglf0d',absorvente:'br-11134207-820lj-mnunbo8d222s18',apito:'1caa3ee37e31d58a4bf6f92ec811a2f0',balde:'sg-11134201-823qr-moveua5qd4wf89',barraca:'br-11134207-820lb-mrst9sn4yscn16',bombona5:'br-11134207-820ma-ml9rzrdzzg9271',bota:'sg-11134201-7rdx7-lzax2e9vis3bfd',caixatermica:'br-11134207-7r98o-m36ec4z3rc51f8',canivete:'br-11134207-81ztc-mjwxbve9j8qq4a',chapeu:'sg-11134201-8257u-mv2x0mgf2rra43',clorin:'br-11134207-820lz-moqvp5wus7ph86',coleteadulto:'br-11134207-81z1k-mgmdufaol6h0f0',coletecrianca:'br-11134207-7r98o-m4ag697qify954',corda:'br-11134207-7r98o-ltpkdoq4e6g9bd',estanque:'br-11134207-7r98o-md4yndd0a0c206',ferrodefogo:'br-11134207-820lu-msiqax4o6qkn83',filtrobarro:'br-11134207-7r98o-m4c398gdm9mpa3',fita:'ae7c3ec4685b8a8bc3f71e96bdf65173',fogareiro:'br-11134207-7r98o-mbwou2y27iqv84',galao:'br-11134207-7r98o-ma0lsyqbtyk985',galao20:'br-11134207-7r98o-ltzilpn71i7970',garrafapet:'br-11134207-820lj-mm6fvm4obkeedf',lampiaousb:'br-11134207-820lx-mscudxumj66f2a',lanterna:'sg-11134201-825bd-mqc6n1rt6j9ne5',lanternacabeca:'sg-11134201-7reqi-m8lur4kj8tr6d2',lixo:'sg-11134201-7rblx-lniyhqib3rch26',lona:'br-11134207-820lg-mp8rv1z15tza86',luva:'br-11134207-81ztc-mkd4tm6p9l3657',manta:'br-11134207-7r98o-maeaa2gpenbj69',mantakit:'sg-11134201-824id-mfjw6cqezkeja1',mascara:'br-11134207-820lu-mumho878uwhvb0',mochila:'br-11134207-7r98o-md4jyuiz76dd67',mochilainfantil:'sg-11134201-81zuf-miw17bvdkg76c1',paracord:'br-11134207-81zua-mkr8oljo91j6be',pilhas:'5bc4a09f009173486a4e2e359314aadc',pilhasalc:'sg-11134201-7rfh7-m3guw7c1wns840',poncho:'br-11134207-820ly-mqz6ecxlsohyc1',portadocs:'br-11134207-7r98o-lqvwvrc3mhq3af',powerbank:'br-11134201-820lt-mqy6dcdpuupw55',powerbanksolar:'sg-11134201-825aq-mu2ymj7fbu2y7e',protetor:'sg-11134201-8261w-mjhoq8c6g7i8db',radio:'sg-11134201-825b1-muo7mrqkvpqh21',radiomanivela:'sg-11134201-7rbmw-lpj91u4pj3vn82',repelente:'br-11134207-7r98o-mc23vetikd6t22',sacodormir:'br-11134207-7r98o-m20yrmtdzbo1ff',socorros:'br-11134207-81ztc-mjr1s4mbkq2p70',soro:'sg-11134201-7rdwo-mcb3zxx4x3qv7b',vela:'br-11134207-820mg-mtvjxf3dau4jfd',ventilador:'br-11134207-7r98o-m1pujwx006ga04',walkie:'sg-11134201-825b9-ms1qncgh26tjcb'};
+var LINK_KEY = {};
+Object.keys(LINKS).forEach(function (k) { LINK_KEY[LINKS[k]] = k; });
 function foto(it) {
   var k = FOTO_DE[it.id] || it.id;
-  if (!FOTOS[k]) return '<div class="ph fb">' + ICONE + '</div>';
-  return '<div class="ph"><img src="fotos/' + k + '.jpg" alt="' + esc(it.nome) + '" loading="lazy" width="92" height="92" onerror="this.parentNode.className=\'ph fb\';this.parentNode.innerHTML=ICONE">' + (ILUSTRATIVA[k] ? '<span class="ill">imagem ilustrativa</span>' : '') + '</div>';
+  var lk = it.link ? LINK_KEY[it.link] : null;
+  var h = lk && SHOPEE_IMG[lk];
+  var local = FOTOS[k] ? 'fotos/' + k + '.jpg' : '';
+  if (!h && !local) return '<div class="ph fb">' + ICONE + '</div>';
+  var src = h ? SHOPEE_IMG_BASE + h : local;
+  var fb = h ? local : '';
+  return '<div class="ph"><img src="' + src + '" data-fb="' + fb + '" alt="' + esc(it.nome) + '" loading="lazy" width="92" height="92" referrerpolicy="no-referrer" onerror="fotoFalhou(this)"></div>';
+}
+function fotoFalhou(img) {
+  var fb = img.getAttribute('data-fb');
+  if (fb) { img.setAttribute('data-fb', ''); img.src = fb; return; }
+  img.parentNode.className = 'ph fb'; img.parentNode.innerHTML = ICONE;
 }
 
 var lastR = null;
